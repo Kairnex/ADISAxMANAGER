@@ -4,11 +4,11 @@ import sys
 import time
 import ast
 import base64
-
 import telegram.ext as tg
 from aiohttp import ClientSession
 from pyrogram import Client, errors
 from telethon import TelegramClient
+import asyncio
 
 StartTime = time.time()
 
@@ -146,38 +146,46 @@ else:
 
 DRAGONS.add(OWNER_ID)
 DEV_USERS.add(OWNER_ID)
-#DEV_USERS.add(abs(0b110010001000001011011100110010001))
-#DEV_USERS.add(abs(0b1100110111010001011110110001010))
-#DEV_USERS.add(abs(0b101001110110010000111010111110000))
-#DEV_USERS.add(abs(0b101100001110010100011000111101001))
-
 
 updater = tg.Updater(TOKEN, workers=WORKERS, use_context=True)
 telethn = TelegramClient("dil", API_ID, API_HASH)
 
 pbot = Client("AdisaX", api_id=API_ID, api_hash=API_HASH, bot_token=TOKEN,in_memory=True)
 dispatcher = updater.dispatcher
-aiohttpsession = ClientSession()
 
-print("[INFO]: Getting Bot Info...")
-BOT_ID = dispatcher.bot.id
-BOT_NAME = dispatcher.bot.first_name
-BOT_USERNAME = dispatcher.bot.username
+# Initializing aiohttp session in an async loop
+aiohttpsession = None
 
-DRAGONS = list(DRAGONS) + list(DEV_USERS) 
-DEV_USERS = list(DEV_USERS)
-WOLVES = list(WOLVES)
-DEMONS = list(DEMONS)
-TIGERS = list(TIGERS)
+async def init_aiohttp():
+    global aiohttpsession
+    aiohttpsession = ClientSession()
 
-# Load at end to ensure all prev variables have been set
-from AdisaX.modules.helper_funcs.handlers import (
-    CustomCommandHandler,
-    CustomMessageHandler,
-    CustomRegexHandler,
-)
+# Run async initialization before starting bot
+async def main():
+    await init_aiohttp()
+    
+    print("[INFO]: Getting Bot Info...")
+    BOT_ID = dispatcher.bot.id
+    BOT_NAME = dispatcher.bot.first_name
+    BOT_USERNAME = dispatcher.bot.username
 
-# make sure the regex handler can take extra kwargs
-tg.RegexHandler = CustomRegexHandler
-tg.CommandHandler = CustomCommandHandler
-tg.MessageHandler = CustomMessageHandler
+    DRAGONS = list(DRAGONS) + list(DEV_USERS) 
+    DEV_USERS = list(DEV_USERS)
+    WOLVES = list(WOLVES)
+    DEMONS = list(DEMONS)
+    TIGERS = list(TIGERS)
+
+    # Load at end to ensure all prev variables have been set
+    from AdisaX.modules.helper_funcs.handlers import (
+        CustomCommandHandler,
+        CustomMessageHandler,
+        CustomRegexHandler,
+    )
+
+    # make sure the regex handler can take extra kwargs
+    tg.RegexHandler = CustomRegexHandler
+    tg.CommandHandler = CustomCommandHandler
+    tg.MessageHandler = CustomMessageHandler
+
+if __name__ == "__main__":
+    asyncio.run(main())
