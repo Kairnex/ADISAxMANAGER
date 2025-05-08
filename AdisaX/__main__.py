@@ -28,7 +28,6 @@ from telethon import __version__ as tlhver
 
 import AdisaX.modules.no_sql.users_db as sql
 from AdisaX import (
-    BOT_NAME,
     BOT_USERNAME,
     LOGGER,
     OWNER_ID,
