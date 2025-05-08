@@ -46,12 +46,9 @@ if ENV:
     EVENT_LOGS = os.environ.get("EVENT_LOGS", None)
     INFOPIC = bool(os.environ.get("INFOPIC", "True"))
     LOAD = os.environ.get("LOAD", "").split()
-    BOT_NAME = "MiCarnioBot"
     MONGO_DB_URI = os.environ.get("MONGO_DB_URI", None)
     NO_LOAD = os.environ.get("NO_LOAD", "").split()
-    START_IMG = os.environ.get(
-        "START_IMG", ""
-    )
+    START_IMG = os.environ.get("START_IMG", "")
     STRICT_GBAN = bool(os.environ.get("STRICT_GBAN", True))
     SUPPORT_CHAT = os.environ.get("SUPPORT_CHAT", "alonegroup121")
     TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TEMP_DOWNLOAD_DIRECTORY", "./")
@@ -169,6 +166,10 @@ async def main():
     BOT_ID = dispatcher.bot.id
     BOT_NAME = dispatcher.bot.first_name
     BOT_USERNAME = dispatcher.bot.username
+
+    # Add BOT_NAME to the global namespace
+    import AdisaX
+    AdisaX.BOT_NAME = BOT_NAME
 
     DRAGONS = list(DRAGONS) + list(DEV_USERS) 
     DEV_USERS = list(DEV_USERS)
