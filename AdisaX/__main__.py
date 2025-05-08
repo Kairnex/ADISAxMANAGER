@@ -27,9 +27,7 @@ from telegram.utils.helpers import escape_markdown
 from telethon import __version__ as tlhver
 
 import AdisaX.modules.no_sql.users_db as sql
-from AdisaX import (
-    BOT_USERNAME,
-    LOGGER,
+from AdisaX import (,
     OWNER_ID,
     START_IMG,
     SUPPORT_CHAT,
